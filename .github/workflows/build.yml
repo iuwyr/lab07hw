@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache Hunter
+        uses: actions/cache@v3
+        with:
+          path: ~/.hunter
+          key: ${{ runner.os }}-hunter-${{ hashFiles('cmake/HunterGate.cmake') }}
+
+      - name: Install CMake
+        uses: lukka/get-cmake@v3
+        with:
+          cmakeVersion: '3.20.0'
+
+      - name: Configure & Build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -- -j
