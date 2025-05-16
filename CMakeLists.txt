@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.10)
 project(primality VERSION 1.0.0)
 
 add_library(primality src/primality.cpp)
-target_include_directories(primality PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_include_directories(primality PUBLIC
+    $<BUILD_INTERFACE:include>
+    $<INSTALL_INTERFACE:include>
+)
 
 install(TARGETS primality EXPORT primality-targets)
 install(EXPORT primality-targets
